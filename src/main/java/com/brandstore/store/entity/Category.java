@@ -27,7 +27,6 @@ public class Category {
 	@OneToMany(mappedBy="category")
 	private List<Clothing> clothings;
 	
-
 	public List<Clothing> getClothings() {
 		return clothings;
 	}
