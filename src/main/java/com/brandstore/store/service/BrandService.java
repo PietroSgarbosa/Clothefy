@@ -20,7 +20,7 @@ public class BrandService {
 	private BrandMapper brandMapper;
 
 	public Brand getById(Long id) {
-		return getBrandRepository().getById(id);
+		return getBrandRepository().findById(id).orElse(null);
 	}
 
 	public void create(BrandDTO dto) {
