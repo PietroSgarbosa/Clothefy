@@ -10,22 +10,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="CLOTHING")
+@Table(name = "CLOTHING")
 public class Clothing {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "NAME", nullable = false)
 	private String name;
-	
-	@Column(name="SIZE")
+
+	@Column(name = "SIZE")
 	private String size;
-	
-	@Column(name="PRICE")
+
+	@Column(name = "PRICE")
 	private double price;
-	
+
 	@ManyToOne
 	@JoinColumn(name="CATEGORY_ID")
 	private Category category;
@@ -69,8 +69,5 @@ public class Clothing {
 	public void setCategory(Category category) {
 		this.category = category;
 	} 
-	
-	
-	
 
 }
