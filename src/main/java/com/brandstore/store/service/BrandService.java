@@ -11,10 +11,8 @@ public class BrandService {
 	@Autowired
 	private BrandRepository brandRepository;
 	
-	
 	private BrandRepository getBrandRepository() {
 		return brandRepository;
 	}
 	
-
 }

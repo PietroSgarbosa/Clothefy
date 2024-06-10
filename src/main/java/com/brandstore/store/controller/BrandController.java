@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.brandstore.store.service.BrandService;
 
 @Controller
-@RequestMapping("/clothings")
+@RequestMapping("/brands")
 public class BrandController {
 	
 	@Autowired

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -26,7 +27,7 @@ public class Clothing {
 	private double price;
 	
 	@ManyToOne
-	@Column(name="CATEGORY_ID")
+	@JoinColumn(name="CATEGORY_ID")
 	private Category category;
 
 	public Long getId() {
