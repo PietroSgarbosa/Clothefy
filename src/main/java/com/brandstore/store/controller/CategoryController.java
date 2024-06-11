@@ -17,43 +17,38 @@ import com.brandstore.store.dto.CategoryDTO;
 import com.brandstore.store.service.CategoryService;
 
 @RestController
-@RequestMapping(value="/categories")
+@RequestMapping(value = "/categories")
 public class CategoryController {
-	
+
 	@Autowired
 	private CategoryService categoryService;
-	
-	@GetMapping(value="/getAll")
+
+	@GetMapping(value = "/getAll")
 	public @ResponseBody ResponseEntity<List<CategoryDTO>> getAll() {
 		return ResponseEntity.status(HttpStatus.OK).body(getCategoryService().getAll());
 	}
-	
-	@GetMapping(value="/getById/{id}")
+
+	@GetMapping(value = "/getById/{id}")
 	public @ResponseBody ResponseEntity<?> getById(@PathVariable Long id) {
-		
+
 		try {
-			
+
 			CategoryDTO categoryDto = getCategoryService().getById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(categoryDto);
-			
-		} catch (Exception e){
-			
+
+		} catch (Exception e) {
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e);
-			
-			
+
 		}
-		
+
 	}
-		
-	@PostMapping(value="/create")
+
+	@PostMapping(value = "/create")
 	public @ResponseBody ResponseEntity<String> create(@RequestBody CategoryDTO categoryDTO) {
 		return ResponseEntity.status(HttpStatus.OK).body(getCategoryService().create(categoryDTO));
 	}
-	
-	
-	
-	
-	
+
 	private CategoryService getCategoryService() {
 		return categoryService;
 	}
