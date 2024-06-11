@@ -25,14 +25,14 @@ public class Category {
 	private String description;
 	
 	@OneToMany(mappedBy="category")
-	private List<Clothing> clothings;
+	private List<Clothing> clothes;
 	
 	public List<Clothing> getClothings() {
-		return clothings;
+		return clothes;
 	}
 
 	public void setClothings(List<Clothing> clothings) {
-		this.clothings = clothings;
+		this.clothes = clothings;
 	}
 
 	public Long getId() {
