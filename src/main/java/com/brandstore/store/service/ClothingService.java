@@ -1,14 +1,18 @@
 package com.brandstore.store.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.brandstore.store.dto.BrandDTO;
+import com.brandstore.store.dto.CategoryDTO;
 import com.brandstore.store.dto.ClothingDTO;
 import com.brandstore.store.entity.Brand;
+import com.brandstore.store.entity.Category;
 import com.brandstore.store.entity.Clothing;
+import com.brandstore.store.repository.CategoryRepository;
 import com.brandstore.store.repository.ClothingRepository;
 import com.brandstore.store.utils.BrandMapper;
 import com.brandstore.store.utils.ClothingMapper;
@@ -20,6 +24,9 @@ public class ClothingService {
 	private ClothingRepository clothingRepository;
 	
 	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
 	private ClothingMapper clothingMapper;
 	
 	public Clothing getById(Long id) {
@@ -28,9 +35,24 @@ public class ClothingService {
 	}
 	
 	public List<ClothingDTO> getAll() {
+		
+		//Buscando uma lista de entidades de roupa
 		List<Clothing> clothingList = getClothingRepository().findAll();
-		List<ClothingDTO> clothingListDTO = clothingList.stream().map(clothing -> ClothingDTO.convertToDTO(clothing))
-				.toList();
+		
+		//Instanciando uma lista de DTO de roupas para converter as entidades
+		List<ClothingDTO> clothingListDTO = new ArrayList<ClothingDTO>();
+		
+		//Usando um for para converter cada uma das entidades em DTO
+		for(Clothing clothing : clothingList) {
+			ClothingDTO clothingDTO = ClothingDTO.convertToDTO(clothing);
+			
+			//Verificando se tem categoria salva, e depois convertendo a categoria para DTO também
+			if(clothing.getCategory() != null) {
+				clothingDTO.setCategoryDTO(CategoryDTO.convertToDTO(clothing.getCategory()));
+			}
+			//adicionando o DTO convertido pra lista de DTO
+			clothingListDTO.add(clothingDTO);
+		}
 
 		return clothingListDTO;
 	}
@@ -38,6 +60,15 @@ public class ClothingService {
 	public void create(ClothingDTO clothingDTO) {
 		if (clothingDTO != null) {
 			Clothing clothingEntity = getClothingMapper().covertToEntity(clothingDTO);
+			
+			//Verificando se o ID da categoria passada não é vazio
+			if(clothingDTO.getCategoryId() != null) {
+				//Buscando a categoria pelo ID pra salvar relacionada a roupa
+				Category category = getCategoryRepository().findById(clothingDTO.getCategoryId()).orElse(null);
+				//Setando a categoria encontrada pelo ID na roupa
+				clothingEntity.setCategory(category);
+			}
+			//salvando a roupa com a relação feita 
 			getClothingRepository().save(clothingEntity);
 		} else {
 			throw new IllegalArgumentException("Clothing cannot be null");
@@ -75,6 +106,10 @@ public class ClothingService {
 	
 	private ClothingRepository getClothingRepository() {
 		return clothingRepository;
+	}
+	
+	private CategoryRepository getCategoryRepository() {
+		return categoryRepository;
 	}
 	
 	private ClothingMapper getClothingMapper() {

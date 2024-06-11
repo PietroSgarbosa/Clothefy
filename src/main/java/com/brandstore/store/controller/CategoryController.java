@@ -30,29 +30,18 @@ public class CategoryController {
 	
 	@GetMapping(value="/getById/{id}")
 	public @ResponseBody ResponseEntity<?> getById(@PathVariable Long id) {
-		
 		try {
-			
 			CategoryDTO categoryDto = getCategoryService().getById(id);
 			return ResponseEntity.status(HttpStatus.OK).body(categoryDto);
-			
 		} catch (Exception e){
-			
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e);
-			
-			
 		}
-		
 	}
 		
 	@PostMapping(value="/create")
 	public @ResponseBody ResponseEntity<String> create(@RequestBody CategoryDTO categoryDTO) {
 		return ResponseEntity.status(HttpStatus.OK).body(getCategoryService().create(categoryDTO));
 	}
-	
-	
-	
-	
 	
 	private CategoryService getCategoryService() {
 		return categoryService;
