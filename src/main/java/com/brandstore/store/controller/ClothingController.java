@@ -53,7 +53,7 @@ public class ClothingController {
 	public @ResponseBody ResponseEntity<?> create(@RequestBody ClothingDTO clothingDTO) {
 		try {
 			getClothingService().create(clothingDTO);
-			return ResponseEntity.status(HttpStatus.OK).body("Training inserted successfully!");
+			return ResponseEntity.status(HttpStatus.OK).body("Clothing inserted successfully!");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Failed trying to insert new data, error message: " + e.getMessage());

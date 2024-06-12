@@ -16,7 +16,7 @@ public class ClothingDTO {
 	
 	private Long categoryId;
 	
-	//private CategoryDTO categoryDTO;
+	private CategoryDTO categoryDTO;
 
 	public Long getId() {
 		return id;
@@ -58,6 +58,14 @@ public class ClothingDTO {
 		this.categoryId = categoryId;
 	}
 	
+	public CategoryDTO getCategoryDTO() {
+		return categoryDTO;
+	}
+
+	public void setCategoryDTO(CategoryDTO categoryDTO) {
+		this.categoryDTO = categoryDTO;
+	}
+
 	static ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}

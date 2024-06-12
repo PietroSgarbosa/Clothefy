@@ -43,9 +43,7 @@ public class CategoryService {
 	}
 	
 	public CategoryDTO getById(Long id) {
-		
 		Category category = getCategoryRepository().findById(id).orElse(null);
-		
 		return CategoryDTO.convertToDTO(category);
 	}
 	
