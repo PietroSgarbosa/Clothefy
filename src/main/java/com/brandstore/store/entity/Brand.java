@@ -1,10 +1,13 @@
 package com.brandstore.store.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -23,6 +26,9 @@ public class Brand {
 	
 	@Column(name="PHONE")
 	private String phone;
+	
+	@OneToMany(mappedBy = "brand")
+	private List<BrandCategory> categories;
 
 	public Long getId() {
 		return id;
@@ -55,7 +61,13 @@ public class Brand {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
-	
+
+	public List<BrandCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<BrandCategory> categories) {
+		this.categories = categories;
+	}
 
 }

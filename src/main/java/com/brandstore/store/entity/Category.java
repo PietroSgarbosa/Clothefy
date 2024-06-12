@@ -27,6 +27,9 @@ public class Category {
 	@OneToMany(mappedBy="category")
 	private List<Clothing> clothes;
 	
+	@OneToMany(mappedBy="category")
+	private List<BrandCategory> brands;
+	
 	public List<Clothing> getClothings() {
 		return clothes;
 	}
@@ -58,7 +61,21 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+	public List<Clothing> getClothes() {
+		return clothes;
+	}
+
+	public void setClothes(List<Clothing> clothes) {
+		this.clothes = clothes;
+	}
+
+	public List<BrandCategory> getBrands() {
+		return brands;
+	}
+
+	public void setBrands(List<BrandCategory> brands) {
+		this.brands = brands;
+	}
 
 }
