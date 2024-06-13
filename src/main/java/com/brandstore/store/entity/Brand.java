@@ -2,6 +2,8 @@ package com.brandstore.store.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,8 @@ public class Brand {
 	@Column(name="PHONE")
 	private String phone;
 	
+	//Negócio, uma marca para muitos negócios/categorias/relação
+	@JsonIgnore
 	@OneToMany(mappedBy = "brand")
 	private List<BrandCategory> categories;
 

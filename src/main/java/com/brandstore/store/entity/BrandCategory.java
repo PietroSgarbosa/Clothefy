@@ -1,5 +1,7 @@
 package com.brandstore.store.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,11 +14,14 @@ import jakarta.persistence.Table;
 @Table(name = "BRAND_CATEGORY")
 public class BrandCategory {
 	
+	//Entidade do negócio comercial das marcas
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 	
 	//Gene do pai
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "ID_BRAND")
 	private Brand brand;

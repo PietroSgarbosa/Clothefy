@@ -5,6 +5,7 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 
 import com.brandstore.store.entity.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class CategoryDTO {
 	
@@ -14,6 +15,7 @@ public class CategoryDTO {
 	
 	private String description;
 	
+	@JsonIgnore
 	private List<ClothingDTO> clothes;
 
 	public Long getId() {

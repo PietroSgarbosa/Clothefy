@@ -1,5 +1,7 @@
 package com.brandstore.store.dto;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 
 import com.brandstore.store.entity.Brand;
@@ -13,6 +15,10 @@ public class BrandDTO {
 	private String adress;
 
 	private String phone;
+	
+	private List<Long> categoriesId;
+	
+	private List<BrandCategoryDTO> categories;
 
 	public Long getId() {
 		return id;
@@ -46,6 +52,22 @@ public class BrandDTO {
 		this.phone = phone;
 	}
 	
+	public List<Long> getCategoriesId() {
+		return categoriesId;
+	}
+
+	public void setCategoriesId(List<Long> categoriesId) {
+		this.categoriesId = categoriesId;
+	}
+	
+	public List<BrandCategoryDTO> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<BrandCategoryDTO> categories) {
+		this.categories = categories;
+	}
+
 	static ModelMapper getModelMapper() {
 		return new ModelMapper();
 	}

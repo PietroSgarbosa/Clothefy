@@ -1,5 +1,7 @@
 package com.brandstore.store.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +29,7 @@ public class Clothing {
 	private double price;
 
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name="CATEGORY_ID")
 	private Category category;
 

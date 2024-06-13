@@ -2,11 +2,14 @@ package com.brandstore.store.dto;
 
 import com.brandstore.store.entity.Brand;
 import com.brandstore.store.entity.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class BrandCategoryDTO {
 	
+	@JsonIgnore
 	private Long id;
 	
+	@JsonIgnore
 	private Brand brand;
 	
 	private Category category;
