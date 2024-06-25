@@ -55,8 +55,8 @@ public class BrandController {
 	@GetMapping(value = "/getAll")
 	public @ResponseBody ResponseEntity<?> getAll() {
 		try {
-			List<BrandDTO> categoryListDTO = getBrandService().getAll();
-			return ResponseEntity.status(HttpStatus.OK).body(categoryListDTO);
+			List<BrandDTO> brandListDTO = getBrandService().getAll();
+			return ResponseEntity.status(HttpStatus.OK).body(brandListDTO);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Internal Server Error: " + e.getMessage());
