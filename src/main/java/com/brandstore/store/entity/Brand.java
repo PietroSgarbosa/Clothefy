@@ -29,7 +29,6 @@ public class Brand {
 	@Column(name="PHONE")
 	private String phone;
 	
-	//Negócio, uma marca para muitos negócios/categorias/relação
 	@JsonIgnore
 	@OneToMany(mappedBy = "brand")
 	private List<BrandCategory> categories;

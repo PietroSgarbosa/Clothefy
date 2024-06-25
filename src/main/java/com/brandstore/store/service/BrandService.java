@@ -34,38 +34,24 @@ public class BrandService {
 		return getBrandRepository().findById(id).orElse(null);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void create(BrandDTO dto) {
 		if (dto != null) {
-			//UMA MARCA
 			Brand brand = getBrandMapper().covertToEntity(dto);
-			
-			//Salva a brand pra gerar um ID ANTES DE SALVAR AS RELAÇÕES
+
 			getBrandRepository().save(brand);
 			
-			//Instanciando uma nova lista de relação BrandCategory vazia
 			List<BrandCategory> negocioLista = new ArrayList<BrandCategory>();
-			
-			//PARA VARIAS CATEGORIAS
+
 			for(Long id : dto.getCategoriesId()) {
-				//Categoria 
 				Category category = getCategoryRepository().getById(id);
-				//Relação pra ser colocada dentro da lista de relações
 				BrandCategory negocio = new BrandCategory();
-				
-				//SETANDO MARCA NA RELAÇÃO
 				negocio.setBrand(brand);
-				
-				//SETANDO CATEGORIA NA RELAÇÃO
 				negocio.setCategory(category);
-				
-				//Salva a nova relação pra gerar um ID novo
 				getNegocioRepository().save(negocio);
-				
-				//COLOCANDO RELAÇÃO PRONTA NA LISTA DE RELAÇÕES PRA SETAR NA MARCA
 				negocioLista.add(negocio);
 			}
 			
-			//Seta a lista de Relações BrandCategory na Marca
 			brand.setCategories(negocioLista);
 		} else {
 			throw new IllegalArgumentException("Atributes cannot by null");

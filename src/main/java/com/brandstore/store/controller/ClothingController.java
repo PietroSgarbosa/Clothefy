@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.brandstore.store.dto.BrandDTO;
 import com.brandstore.store.dto.ClothingDTO;
 import com.brandstore.store.service.ClothingService;
 

@@ -14,19 +14,15 @@ import jakarta.persistence.Table;
 @Table(name = "BRAND_CATEGORY")
 public class BrandCategory {
 	
-	//Entidade do negócio comercial das marcas
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id; 
 	
-	//Gene do pai
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "ID_BRAND")
 	private Brand brand;
 
-	//Gene da mãe
 	@ManyToOne
 	@JoinColumn(name = "ID_CATEGORY")
 	private Category category;

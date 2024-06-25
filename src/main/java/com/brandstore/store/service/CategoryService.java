@@ -34,10 +34,6 @@ public class CategoryService {
 			return listCategoryDTO;
 			
 		} catch(Exception e) {
-			//Exceções não usam RETURN, apenas THROW.
-			//Eu posso jogar a exceção padrão (e);
-			//Eu posso jogar uma exceção especifica que são reservadas do java;
-			//Eu posso jogar uma exception customizada.
 			throw e;
 		}
 	}
@@ -53,7 +49,6 @@ public class CategoryService {
 				getCategoryRepository().save(getCategoryMapper().covertToEntity(categoryDTO));
 				return "Category registered succesfully!";
 			} 
-			//Funcionaria melhor como exception customizada
 			return "DTO cannot be null";
 		} catch (Exception e) {
 			throw e;

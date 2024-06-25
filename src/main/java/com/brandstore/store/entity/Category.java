@@ -30,7 +30,6 @@ public class Category {
 	@OneToMany(mappedBy="category")
 	private List<Clothing> clothes;
 	
-	//Uma categoria para vários negócios/marcas/relação
 	@JsonIgnore
 	@OneToMany(mappedBy="category")
 	private List<BrandCategory> brands;
