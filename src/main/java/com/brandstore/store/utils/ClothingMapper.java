@@ -14,7 +14,6 @@ public class ClothingMapper {
 		entity.setName(dto.getName());
 		entity.setPrice(dto.getPrice());
 		entity.setSize(dto.getSize());
-		//entity.setCategory(dto.getCategoryId());
 		
 		return entity;
 	}

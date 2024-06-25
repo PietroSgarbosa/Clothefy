@@ -8,7 +8,6 @@ import com.brandstore.store.entity.Category;
 @Component
 public class CategoryMapper {
 
-	//Convertendo DTO para Entidade
 	public Category covertToEntity(CategoryDTO dto) {
 		Category entity = new Category();
 
