@@ -2,7 +2,6 @@ package com.brandstore.store.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,25 +11,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "CLOTHING")
-public class Clothing {
-
+@Table(name = "BRAND_CATEGORY")
+public class BrandCategory {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-
-	@Column(name = "NAME", nullable = false)
-	private String name;
-
-	@Column(name = "SIZE")
-	private String size;
-
-	@Column(name = "PRICE")
-	private double price;
+	private Long id; 
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "ID_BRAND")
+	private Brand brand;
 
 	@ManyToOne
-	@JsonIgnore
-	@JoinColumn(name="CATEGORY_ID")
+	@JoinColumn(name = "ID_CATEGORY")
 	private Category category;
 
 	public Long getId() {
@@ -41,28 +35,12 @@ public class Clothing {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public Brand getBrand() {
+		return brand;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getSize() {
-		return size;
-	}
-
-	public void setSize(String size) {
-		this.size = size;
-	}
-
-	public double getPrice() {
-		return price;
-	}
-
-	public void setPrice(double price) {
-		this.price = price;
+	public void setBrand(Brand brand) {
+		this.brand = brand;
 	}
 
 	public Category getCategory() {
@@ -71,6 +49,6 @@ public class Clothing {
 
 	public void setCategory(Category category) {
 		this.category = category;
-	} 
+	}
 
 }

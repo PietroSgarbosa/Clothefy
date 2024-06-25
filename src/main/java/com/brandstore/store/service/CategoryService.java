@@ -1,0 +1,66 @@
+package com.brandstore.store.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.brandstore.store.dto.CategoryDTO;
+import com.brandstore.store.entity.Category;
+import com.brandstore.store.repository.CategoryRepository;
+import com.brandstore.store.utils.CategoryMapper;
+
+@Service
+public class CategoryService {
+	
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
+	@Autowired
+	private CategoryMapper categoryMapper;
+	
+	public List<CategoryDTO> getAll() {
+		try {
+			List<Category> listCategory = getCategoryRepository().findAll();
+			List<CategoryDTO> listCategoryDTO = new ArrayList<CategoryDTO>();
+			
+			if(listCategory.isEmpty() == false) {
+				for(Category category : listCategory) {
+					listCategoryDTO.add(CategoryDTO.convertToDTO(category));
+				}
+				return listCategoryDTO;
+			}
+			return listCategoryDTO;
+			
+		} catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	public CategoryDTO getById(Long id) {
+		Category category = getCategoryRepository().findById(id).orElse(null);
+		return CategoryDTO.convertToDTO(category);
+	}
+	
+	public String create(CategoryDTO categoryDTO) {
+		try {
+			if(categoryDTO != null) {
+				getCategoryRepository().save(getCategoryMapper().covertToEntity(categoryDTO));
+				return "Category registered succesfully!";
+			} 
+			return "DTO cannot be null";
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	private CategoryRepository getCategoryRepository() {
+		return categoryRepository;
+	}
+	
+	private CategoryMapper getCategoryMapper() {
+		return categoryMapper;
+	}
+
+}

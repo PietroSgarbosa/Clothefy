@@ -2,6 +2,8 @@ package com.brandstore.store.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,15 +26,20 @@ public class Category {
 	@Column(name="DESCRIPTION")
 	private String description;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="category")
-	private List<Clothing> clothings;
+	private List<Clothing> clothes;
 	
-	public List<Clothing> getClothings() {
-		return clothings;
+	@JsonIgnore
+	@OneToMany(mappedBy="category")
+	private List<BrandCategory> brands;
+	
+	public List<Clothing> getClothes() {
+		return clothes;
 	}
 
-	public void setClothings(List<Clothing> clothings) {
-		this.clothings = clothings;
+	public void setClothes(List<Clothing> clothings) {
+		this.clothes = clothings;
 	}
 
 	public Long getId() {
@@ -58,7 +65,13 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+	public List<BrandCategory> getBrands() {
+		return brands;
+	}
+
+	public void setBrands(List<BrandCategory> brands) {
+		this.brands = brands;
+	}
 
 }
