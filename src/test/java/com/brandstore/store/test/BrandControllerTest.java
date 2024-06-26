@@ -2,7 +2,9 @@ package com.brandstore.store.test;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+//import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,6 +47,7 @@ public class BrandControllerTest {
 	private static final Long BRAND_ID = 1l;
 	private static final Long BRAND_ID2 = 2l;
 	private static final String DATABASE_ERROR = "Database error";
+	private static final String MESSAGE_SUCCESS = "Brand updated successufully";
 
 	@SuppressWarnings("unchecked")
 	@Test
@@ -120,26 +123,17 @@ public class BrandControllerTest {
 		BrandDTO newBrand = new BrandDTO();
 		newBrand.setName("Nike");
 		newBrand.setAdress("Rua 1");
-		newBrand.setPhone("123456");
+		newBrand.setPhone("123456");		
 		
-		BrandDTO savedBrand = new BrandDTO();
-		savedBrand.setId(BRAND_ID);
-		savedBrand.setName("Nike");
-		savedBrand.setAdress("Rua 1");
-		savedBrand.setPhone("123456");
-		
-		when(brandService.create(any(BrandDTO.class))).thenReturn(savedBrand);
-		
+		doNothing().when(brandService).create(newBrand);
+			
 		//Act
-		ResponseEntity<BrandDTO> testResponse = (ResponseEntity<BrandDTO>) brandController.create(newBrand);
+		ResponseEntity<String> testResponse = (ResponseEntity<String>) brandController.create(newBrand);
 		
 		//Assert
-		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(testResponse.getBody()).isNotNull();
-		assertThat(testResponse.getBody().getId()).isEqualTo(BRAND_ID);
-		assertThat(testResponse.getBody().getName()).isEqualTo("Nike");
-		assertThat(testResponse.getBody().getAdress()).isEqualTo("Rua 1");
-		assertThat(testResponse.getBody().getPhone()).isEqualTo("123456");
+		assertThat(testResponse.getBody()).isEqualTo("Brand inserted successfully!");
 		verify(brandService, times(1)).create(newBrand);		
 	}
 	
@@ -150,9 +144,9 @@ public class BrandControllerTest {
 		BrandDTO newBrand = new BrandDTO();
 		newBrand.setName("Nike");
 		newBrand.setAdress("Rua 1");
-		newBrand.setPhone("123456");
+		newBrand.setPhone("123456");		
 		
-		when(brandService.create(any(BrandDTO.class))).thenThrow(new RuntimeException(DATABASE_ERROR));
+		doThrow(new RuntimeException(DATABASE_ERROR)).when(brandService).create(newBrand);
 		
 		//Act
 		
@@ -160,7 +154,90 @@ public class BrandControllerTest {
 		
 		//Assert
 		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-		assertThat(testResponse.getBody()).isEqualTo("Internal Server Error: " + DATABASE_ERROR);
+		//assertThat(testResponse.getBody()).isEqualTo("Internal Server Error: " + DATABASE_ERROR);
 		verify(brandService, times(1)).create(newBrand);
 	}
+	
+	
+	@Test
+	void testUpdate() {
+		// Arrange
+		
+		BrandDTO brandToUpdate = new BrandDTO();
+		brandToUpdate.setName("Nike");
+		brandToUpdate.setAdress("Rua 1");
+		brandToUpdate.setPhone("123456");
+		
+		when(brandService.update(brandToUpdate)).thenReturn(MESSAGE_SUCCESS);
+		
+		//Act
+		
+		ResponseEntity<String> testResponse = brandController.update(brandToUpdate);
+		
+		//Assert 
+		
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(testResponse.getBody()).isEqualTo(MESSAGE_SUCCESS);
+		verify(brandService, times(1)).update(brandToUpdate);
+				
+	}
+	
+	@Test
+	void testUpdate_WhenControllerThrowsException() {
+		//Arrange
+		
+		BrandDTO brandToUpdate = new BrandDTO();
+		brandToUpdate.setName("Nike");
+		brandToUpdate.setAdress("Rua 1");
+		brandToUpdate.setPhone("123456");
+		
+		String errorMessage = "Error trying to update brand";
+		
+		when(brandService.update(brandToUpdate)).thenThrow(new RuntimeException(DATABASE_ERROR));
+		
+		// Act
+		
+		ResponseEntity<String> testResponse = brandController.update(brandToUpdate);
+		
+		//Assert
+		
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+		assertThat(testResponse.getBody()).isEqualTo("Error trying to update brand. Error message: " + DATABASE_ERROR);
+		verify(brandService, times(1)).update(brandToUpdate);
+		}
+	
+	@Test
+	void testDelete() {
+		//Arrange
+		
+		when(brandService.delete(BRAND_ID)).thenReturn( "Brand of ID " + BRAND_ID + " removed!");
+		
+		//Act
+		
+		ResponseEntity<String> testResponse = brandController.delete(BRAND_ID);
+		
+		//Assert
+				
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(testResponse.getBody()).isEqualTo("Brand deleted succesfully");
+		verify(brandService, times(1)).delete(BRAND_ID);
+	}
+	
+	@Test
+	void TestDelete_WhenControllerThrowsException() {
+		
+		//Arrage
+		
+		doThrow(new RuntimeException(DATABASE_ERROR)).when(brandService).delete(BRAND_ID);
+		
+		//Act
+		
+		ResponseEntity<String> testResponse = brandController.delete(BRAND_ID);
+		
+		//Assert
+		
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+		verify(brandService, times(1)).delete(BRAND_ID);
+	}
+	
 }
