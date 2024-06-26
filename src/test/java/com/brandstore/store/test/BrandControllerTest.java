@@ -2,6 +2,7 @@ package com.brandstore.store.test;
 
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -99,7 +100,7 @@ public class BrandControllerTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	void testGetall_WhenControllerThrowsException() {
+	void testGetAll_WhenControllerThrowsException() {
 		// Arrange
 		when(brandService.getAll()).thenThrow(new RuntimeException(DATABASE_ERROR));
 
@@ -111,5 +112,55 @@ public class BrandControllerTest {
 		assertThat(testResponse.getBody()).isEqualTo("Internal Server Error: " + DATABASE_ERROR);
 		verify(brandService, times(1)).getAll();
 	}
-
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	void testCreate() {
+		//Arrange
+		BrandDTO newBrand = new BrandDTO();
+		newBrand.setName("Nike");
+		newBrand.setAdress("Rua 1");
+		newBrand.setPhone("123456");
+		
+		BrandDTO savedBrand = new BrandDTO();
+		savedBrand.setId(BRAND_ID);
+		savedBrand.setName("Nike");
+		savedBrand.setAdress("Rua 1");
+		savedBrand.setPhone("123456");
+		
+		when(brandService.create(any(BrandDTO.class))).thenReturn(savedBrand);
+		
+		//Act
+		ResponseEntity<BrandDTO> testResponse = (ResponseEntity<BrandDTO>) brandController.create(newBrand);
+		
+		//Assert
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+		assertThat(testResponse.getBody()).isNotNull();
+		assertThat(testResponse.getBody().getId()).isEqualTo(BRAND_ID);
+		assertThat(testResponse.getBody().getName()).isEqualTo("Nike");
+		assertThat(testResponse.getBody().getAdress()).isEqualTo("Rua 1");
+		assertThat(testResponse.getBody().getPhone()).isEqualTo("123456");
+		verify(brandService, times(1)).create(newBrand);		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	void testCreate_WhenControllerThrowsException() {
+		//Arrange
+		BrandDTO newBrand = new BrandDTO();
+		newBrand.setName("Nike");
+		newBrand.setAdress("Rua 1");
+		newBrand.setPhone("123456");
+		
+		when(brandService.create(any(BrandDTO.class))).thenThrow(new RuntimeException(DATABASE_ERROR));
+		
+		//Act
+		
+		ResponseEntity<?> testResponse = brandController.create(newBrand);
+		
+		//Assert
+		assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+		assertThat(testResponse.getBody()).isEqualTo("Internal Server Error: " + DATABASE_ERROR);
+		verify(brandService, times(1)).create(newBrand);
+	}
 }
