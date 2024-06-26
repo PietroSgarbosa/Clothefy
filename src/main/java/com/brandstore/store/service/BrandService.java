@@ -33,7 +33,7 @@ public class BrandService {
 	public Brand getById(Long id) {
 		return getBrandRepository().findById(id).orElse(null);
 	}
-
+	
 	@SuppressWarnings("deprecation")
 	public void create(BrandDTO dto) {
 		if (dto != null) {
