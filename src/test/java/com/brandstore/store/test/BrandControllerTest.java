@@ -3,6 +3,10 @@ package com.brandstore.store.test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -128,7 +132,38 @@ public class BrandControllerTest {
 	    assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 	    verify(brandService, times(1)).getById(1L);
 	}
+	
+	@Test
+	void testCreate() {
+	    // Arrange - organizar ou preparar os dados mockados
+	    BrandDTO brandCreate = new BrandDTO();
+	    brandCreate.setId(3L);
+	    brandCreate.setName("Condor");
+	    brandCreate.setCategoriesId(new ArrayList<>(Arrays.asList(1L, 2L, 3L)));
+	    brandCreate.setAdress("São Paulo");
+	    brandCreate.setPhone("13-9998588");
 
+	    // Act - chamar o método que vai ser testado (chamar create)
+	    ResponseEntity<?> testResponse = brandController.create(brandCreate);
 
+	    // Assert - verificar ou validar os efeitos colaterais
+	    assertThat(testResponse.getBody()).isEqualTo("Brand inserted successfully!");
+	    assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+	    verify(brandService, times(1)).create(brandCreate);
+	}
+	
+	 @Test
+	    void testCreate_WhenControllerThrowsException() {
+	        // Arrange - configurar o mock para lançar uma exceção
+	        doThrow(new RuntimeException("Nenhum dado encontrado")).when(brandService).create(null);
+
+	        // Act - chamar o método do controlador
+	        ResponseEntity<?> testResponse = brandController.create(null);
+
+	        // Assert - verificar ou validar os efeitos colaterais
+	        assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+	        assertThat(testResponse.getBody()).isEqualTo("Failed trying to insert new data, error message: Nenhum dado encontrado");
+	        verify(brandService, times(1)).create(null);
+	    }
 
 }
