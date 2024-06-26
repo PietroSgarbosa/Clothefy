@@ -5,6 +5,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -134,23 +135,26 @@ public class BrandControllerTest {
 	}
 	
 	@Test
-	void testCreate() {
-	    // Arrange - organizar ou preparar os dados mockados
-	    BrandDTO brandCreate = new BrandDTO();
-	    brandCreate.setId(3L);
-	    brandCreate.setName("Condor");
-	    brandCreate.setCategoriesId(new ArrayList<>(Arrays.asList(1L, 2L, 3L)));
-	    brandCreate.setAdress("São Paulo");
-	    brandCreate.setPhone("13-9998588");
+    void testCreate() {
+        // Arrange - organizar ou preparar os dados mockados
+        BrandDTO brandCreate = new BrandDTO();
+        brandCreate.setId(3L);
+        brandCreate.setName("Condor");
+        brandCreate.setCategoriesId(new ArrayList<>(Arrays.asList(1L, 2L, 3L)));
+        brandCreate.setAdress("São Paulo");
+        brandCreate.setPhone("13-9998588");
 
-	    // Act - chamar o método que vai ser testado (chamar create)
-	    ResponseEntity<?> testResponse = brandController.create(brandCreate);
+        // Configurar o mock para não fazer nada quando o método create for chamado
+        doNothing().when(brandService).create(brandCreate);
 
-	    // Assert - verificar ou validar os efeitos colaterais
-	    assertThat(testResponse.getBody()).isEqualTo("Brand inserted successfully!");
-	    assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
-	    verify(brandService, times(1)).create(brandCreate);
-	}
+        // Act - chamar o método que vai ser testado (chamar create)
+        ResponseEntity<?> testResponse = brandController.create(brandCreate);
+
+        // Assert - verificar ou validar os efeitos colaterais
+        assertThat(testResponse.getBody()).isEqualTo("Brand inserted successfully!");
+        assertThat(testResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+        verify(brandService, times(1)).create(brandCreate);
+    }
 	
 	 @Test
 	    void testCreate_WhenControllerThrowsException() {
