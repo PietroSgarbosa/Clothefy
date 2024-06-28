@@ -51,7 +51,7 @@ public class BrandService {
 				getNegocioRepository().save(negocio);
 				negocioLista.add(negocio);
 			}
-			
+						
 			brand.setCategories(negocioLista);
 		} else {
 			throw new IllegalArgumentException("Atributes cannot by null");

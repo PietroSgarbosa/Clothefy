@@ -1,6 +1,11 @@
 package com.brandstore.store.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -16,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.brandstore.store.dto.BrandDTO;
 import com.brandstore.store.entity.Brand;
+import com.brandstore.store.entity.BrandCategory;
+import com.brandstore.store.entity.Category;
 import com.brandstore.store.repository.BrandCategoryRepository;
 import com.brandstore.store.repository.BrandRepository;
 import com.brandstore.store.repository.CategoryRepository;
@@ -97,7 +104,7 @@ public class BrandServiceTest {
 		assertThat(result).isNull();
 		verify(brandRepository, times(1)).findAll();		
 	}
-	
+		
 	@Test
 	void testGetById() {
 		
@@ -134,4 +141,149 @@ public class BrandServiceTest {
 		verify(brandRepository, times(1)).findById(BRAND_ID);
 	}
 	
+	@SuppressWarnings({ "deprecation" })
+	@Test
+	void testCreateBrand() {
+		
+		//Arrange			
+		BrandDTO brandDTO = new BrandDTO();
+		brandDTO.setName("Nike");
+		brandDTO.setAdress("Rua 1");
+		brandDTO.setPhone("123456");
+		brandDTO.setCategoriesId(Arrays.asList(1l, 2l));
+		
+		Brand brand = new Brand();
+		brand.setName("Nike");
+		brand.setAdress("Rua 1");
+		brand.setPhone("123456");
+		
+		Category category1 = new Category();
+		category1.setId(1l);
+		category1.setName("Moda Praia");
+		
+		Category category2 = new Category();
+		category2.setId(2l);
+		category2.setName("Sport");		
+		
+		BrandCategory brandCategory = new BrandCategory();
+		brandCategory.setBrand(brand);
+		brandCategory.setCategory(category1);
+		
+		
+		when(brandMapper.covertToEntity(brandDTO)).thenReturn(brand);
+		when(categoryRepository.getById(1l)).thenReturn(category1);
+		when(categoryRepository.getById(2l)).thenReturn(category2);
+		when(brandRepository.save(any(Brand.class))).thenReturn(brand);		
+		
+		// Act
+		brandService.create(brandDTO);
+		
+		//Assert
+				
+		verify(brandMapper, times(1)).covertToEntity(brandDTO);
+		verify(brandRepository, times(1)).save(brand);		
+		verify(brandCategoryRepository, times(2)).save(any(BrandCategory.class));
+		verify(categoryRepository, times(1)).getById(1l);
+		verify(categoryRepository, times(1)).getById(2l);
+	}
+	
+	@Test
+	void testCreateBrand_WhenServiceThrowsException() {		
+		
+		assertThatThrownBy(() -> brandService.create(null))
+		.isInstanceOf(IllegalArgumentException.class)
+		.hasMessage("Atributes cannot by null");
+	}	
+	
+	
+	@Test
+	void testUpdateBrand_WhenBrandValid() {
+		
+		BrandDTO brandDTO = new BrandDTO();		
+		brandDTO.setId(BRAND_ID);
+		brandDTO.setName("Nike");
+		brandDTO.setAdress("Rua 1");
+		brandDTO.setPhone("123456");
+		
+		
+		Brand brand = new Brand();		
+		brand.setId(BRAND_ID);
+		brand.setName("Adidas");
+		brand.setAdress("Rua 2");
+		brand.setPhone("654321");		
+		
+		when(brandRepository.findById(brandDTO.getId())).thenReturn(Optional.of(brand));
+		
+		// Act
+		String response = brandService.update(brandDTO);			
+		
+		// Assert	
+
+		String expectedResponse = "Brand of ID " + brandDTO.getId() + " updated successfully!";
+	    assertEquals(expectedResponse, response);
+	    verify(brandRepository, times(1)).save(brand);	
+		
+	}
+	
+	@Test
+	void testUpdateBrand_WhenBrandInvalid() {
+		
+		// Arrage
+		
+		BrandDTO brandDTO = new BrandDTO();
+		brandDTO.setId(BRAND_ID);
+		when(brandRepository.findById(brandDTO.getId())).thenReturn(Optional.empty());
+		
+		// Act
+		String result = brandService.update(brandDTO);
+		
+		// Assert
+		
+		assertEquals("Brand of ID " + brandDTO.getId() + " not found", result);
+		verify(brandRepository, never()).save(any(Brand.class));
+	}
+	
+	
+
+	@ Test
+	void testDeleteWhithBrandValid() {
+		
+		// Arrange		
+		
+		Brand brand = new Brand();
+		brand.setId(BRAND_ID);
+		
+		when(brandRepository.findById(BRAND_ID)).thenReturn(Optional.of(brand));		
+		
+		// Act		
+		
+		String result = brandService.delete(BRAND_ID);
+		
+		// Assert
+		
+		assertEquals("Brand of ID " + BRAND_ID + " removed!", result);  
+		verify(brandRepository, times(1)).deleteById(BRAND_ID);
+		
+	}
+	
+
+	@Test
+	void testDeleteWithBrandNull() {
+		 // Arrange
+		
+		
+		when(brandRepository.findById(BRAND_ID)).thenReturn(Optional.empty());
+		
+		// Act 
+		
+		String result = brandService.delete(BRAND_ID);
+		
+		// Assert
+		
+		assertEquals("This brand ID " + BRAND_ID + " doesn't exist", result);
+		verify(brandRepository, times(1)).findById(BRAND_ID);
+		verify(brandRepository, never()).deleteById(anyLong());
+	}	
 }
+
+

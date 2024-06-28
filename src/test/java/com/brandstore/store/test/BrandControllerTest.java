@@ -136,7 +136,7 @@ public class BrandControllerTest {
 		assertThat(testResponse.getBody()).isEqualTo("Brand inserted successfully!");
 		verify(brandService, times(1)).create(newBrand);		
 	}
-	
+		
 	@SuppressWarnings("unchecked")
 	@Test
 	void testCreate_WhenControllerThrowsException() {
