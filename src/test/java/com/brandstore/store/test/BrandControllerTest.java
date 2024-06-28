@@ -216,8 +216,7 @@ public class BrandControllerTest {
 		//Arrange
 		BrandDTO brand = new BrandDTO();
 		brand.setName("Teste");
-		brand.setAdress("Rua");
-		brand.setPhone("333333");
+	
 
 		when(brandService.update(brand)).thenReturn("Feito");
 
