@@ -55,7 +55,6 @@ public class BrandService {
 			brand.setCategories(negocioLista);
 		} else {
 			throw new IllegalArgumentException("Atributes cannot by null");
-
 		}
 	}
 
